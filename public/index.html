@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>시네마 큐레이터 — AI 영화 추천 서비스</title>
+  <meta name="description" content="사용자의 기분과 취향에 딱 맞는 영화를 추천해 드리는 AI 시네마 큐레이터입니다.">
+  <link rel="stylesheet" href="src/css/styles.css">
+</head>
+<body>
+  <!-- 극장 상단 커튼 장식 레이어 -->
+  <div class="theater-curtain-top" aria-hidden="true"></div>
+
+  <div class="site-container">
+    <!-- 헤더 영역 -->
+    <header class="site-header">
+      <div class="logo-badge" aria-hidden="true">🎞️ CINEMA CURATOR</div>
+      <h1 class="service-title">시네마 큐레이터</h1>
+      <p class="service-subtitle">오늘 당신의 순간을 완성할 특별한 한 편의 영화</p>
+    </header>
+
+    <main id="main-content">
+      <!-- 히어로 및 추천 입력 폼 영역 (스크린 컨셉) -->
+      <section class="screen-stage" aria-labelledby="recommend-heading">
+        <div class="stage-frame">
+          <div class="curtain-left" aria-hidden="true"></div>
+          
+          <div class="theater-screen">
+            <h2 id="recommend-heading" class="screen-title">오늘 어떤 영화를 보고 싶나요?</h2>
+            <p class="screen-desc">
+              기분, 날씨, 함께 보는 사람, 원하는 분위기를 자유롭게 문장으로 적어주세요.
+            </p>
+
+            <form id="recommend-form" class="recommend-form" novalidate>
+              <div class="form-group">
+                <label for="prompt-input" class="visually-hidden">영화 추천 질문</label>
+                <textarea
+                  id="prompt-input"
+                  name="prompt"
+                  class="prompt-textarea"
+                  rows="3"
+                  minlength="3"
+                  maxlength="500"
+                  placeholder="예: 비 오는 밤 혼자 따뜻한 코코아 마시며 볼 만한 감동적인 드라마 영화 추천해줘"
+                  required
+                ></textarea>
+                <div class="char-count-wrap">
+                  <span id="prompt-char-count" class="char-count">0 / 500</span>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" id="recommend-submit-btn" class="btn btn-primary">
+                  <span class="btn-text">🎬 영화 추천받기</span>
+                  <span class="btn-spinner" aria-hidden="true"></span>
+                </button>
+              </div>
+
+              <!-- 추천 폼 상태 메시지 -->
+              <div id="recommend-status" class="status-message" role="status" aria-live="polite"></div>
+            </form>
+          </div>
+
+          <div class="curtain-right" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <!-- 영화 추천 결과 영역 -->
+      <section id="result-section" class="result-section" aria-labelledby="result-heading" hidden>
+        <h2 id="result-heading" class="section-title">오늘의 추천 영화</h2>
+        <p class="section-notice">
+          * AI가 제안하는 추천 정보이며, 사실 관계는 실제 작품과 다소 차이가 있을 수 있습니다.
+        </p>
+
+        <!-- 대표 추천 카드 -->
+        <article class="featured-movie-card">
+          <div class="featured-badge">오늘의 대표 추천작</div>
+          <h3 id="main-movie-title" class="movie-title"></h3>
+          <div class="movie-meta">
+            <span class="meta-item">
+              <span class="meta-label">개봉일:</span>
+              <strong id="main-movie-release" class="meta-value"></strong>
+            </span>
+            <span class="meta-separator" aria-hidden="true">|</span>
+            <span class="meta-item">
+              <span class="meta-label">러닝타임:</span>
+              <strong id="main-movie-runtime" class="meta-value"></strong>
+            </span>
+          </div>
+          <p id="main-movie-desc" class="movie-description"></p>
+        </article>
+
+        <!-- 비슷한 영화 영역 -->
+        <div id="similar-movies-wrapper" class="similar-movies-wrapper">
+          <h3 class="similar-heading">함께 보면 좋은 비슷한 영화</h3>
+          <div id="similar-movies-list" class="similar-grid"></div>
+        </div>
+      </section>
+
+      <!-- 피드백 섹션 -->
+      <section class="feedback-section" aria-labelledby="feedback-heading">
+        <div class="feedback-header-wrap">
+          <h2 id="feedback-heading" class="section-title">관람객 한줄평 & 피드백</h2>
+          <p class="feedback-notice">
+            📢 등록된 피드백은 모든 방문자에게 공개됩니다. 개인정보(전화번호, 이메일 등)는 작성하지 말아주세요.
+          </p>
+        </div>
+
+        <!-- 피드백 작성 폼 -->
+        <form id="feedback-form" class="feedback-form" novalidate>
+          <div class="feedback-inputs-row">
+            <div class="form-group name-group">
+              <label for="feedback-name-input" class="form-label">작성자 닉네임 (선택)</label>
+              <input
+                type="text"
+                id="feedback-name-input"
+                name="name"
+                class="form-input"
+                maxlength="30"
+                placeholder="익명의 영화팬 (최대 30자)"
+              >
+            </div>
+          </div>
+
+          <div class="form-group message-group">
+            <label for="feedback-message-input" class="form-label">피드백 내용 (필수)</label>
+            <textarea
+              id="feedback-message-input"
+              name="message"
+              class="form-textarea"
+              rows="3"
+              minlength="1"
+              maxlength="500"
+              placeholder="추천받은 영화에 대한 감상이나 서비스 개선 의견을 남겨주세요 (1~500자)"
+              required
+            ></textarea>
+            <div class="char-count-wrap">
+              <span id="feedback-char-count" class="char-count">0 / 500</span>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="feedback-submit-btn" class="btn btn-secondary">
+              <span class="btn-text">💬 피드백 등록하기</span>
+              <span class="btn-spinner" aria-hidden="true"></span>
+            </button>
+          </div>
+
+          <div id="feedback-status" class="status-message" role="status" aria-live="polite"></div>
+        </form>
+
+        <!-- 최신 피드백 목록 피드 -->
+        <div class="feedback-list-container">
+          <h3 class="visually-hidden">등록된 피드백 목록</h3>
+          <div id="feedback-loading" class="list-status-text" hidden>피드백을 불러오는 중입니다...</div>
+          <div id="feedback-empty" class="list-status-text" hidden>아직 등록된 피드백이 없습니다. 첫 번째 피드백을 남겨보세요!</div>
+          <div id="feedback-error" class="list-status-text error-text" hidden></div>
+          <ul id="feedback-list" class="feedback-items-list" aria-live="polite"></ul>
+        </div>
+      </section>
+    </main>
+
+    <!-- 푸터 영역 -->
+    <footer class="site-footer">
+      <p class="footer-text">© 시네마 큐레이터 — AI 기반 클래식 영화 추천 서비스</p>
+    </footer>
+  </div>
+
+  <script src="src/js/app.js"></script>
+</body>
+</html>
+

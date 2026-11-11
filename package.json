@@ -5,11 +5,11 @@
   "main": "index.html",
   "type": "commonjs",
   "scripts": {
-    "build": "echo No build needed",
+    "build": "node build.js",
     "dev": "node dev-server.js",
     "start": "node dev-server.js",
     "vercel-dev": "vercel dev",
-    "check": "node --check api/recommend.js && node --check api/feedback.js && node --check lib/openai.js && node --check lib/supabase.js && node --check lib/validation.js && node --check dev-server.js"
+    "check": "node --check api/recommend.js && node --check api/feedback.js && node --check lib/openai.js && node --check lib/supabase.js && node --check lib/validation.js && node --check dev-server.js && node --check build.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
