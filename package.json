@@ -1,0 +1,30 @@
+{
+  "name": "movie-recommendation-service",
+  "version": "1.0.0",
+  "description": "AI 기반 영화 추천 및 피드백 수집 웹 서비스",
+  "main": "index.html",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "node dev-server.js",
+    "start": "node dev-server.js",
+    "vercel-dev": "vercel dev",
+    "check": "node --check api/recommend.js && node --check api/feedback.js && node --check lib/openai.js && node --check lib/supabase.js && node --check lib/validation.js && node --check dev-server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "dotenv": "^16.4.7",
+    "openai": "^4.86.1"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  },
+  "keywords": [
+    "movie",
+    "recommendation",
+    "openai",
+    "supabase",
+    "vercel"
+  ],
+  "author": "",
+  "license": "ISC"
+}
