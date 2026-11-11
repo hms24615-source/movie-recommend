@@ -5,6 +5,7 @@
   "main": "index.html",
   "type": "commonjs",
   "scripts": {
+    "build": "echo No build needed",
     "dev": "node dev-server.js",
     "start": "node dev-server.js",
     "vercel-dev": "vercel dev",
