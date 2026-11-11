@@ -108,9 +108,10 @@
 
         <!-- 피드백 작성 폼 -->
         <form id="feedback-form" class="feedback-form" novalidate>
-          <div class="feedback-inputs-row">
-            <div class="form-group name-group">
-              <label for="feedback-name-input" class="form-label">작성자 닉네임 (선택)</label>
+          <div class="feedback-inputs-grid">
+            <!-- 1. 작성자 (선택) -->
+            <div class="form-group">
+              <label for="feedback-name-input" class="form-label">작성자 (선택)</label>
               <input
                 type="text"
                 id="feedback-name-input"
@@ -120,10 +121,88 @@
                 placeholder="익명의 영화팬 (최대 30자)"
               >
             </div>
+
+            <!-- 2. 영화 (선택) -->
+            <div class="form-group">
+              <label for="feedback-movie-input" class="form-label">영화 제목 (선택)</label>
+              <input
+                type="text"
+                id="feedback-movie-input"
+                name="movie_title"
+                class="form-input"
+                maxlength="100"
+                placeholder="예: 라라랜드, 인터스텔라"
+              >
+            </div>
+
+            <!-- 3. 별점 (인터랙티브 5개 별 클릭 위젯) -->
+            <div class="form-group rating-form-group">
+              <label class="form-label">
+                별점 <span id="rating-helper-text" class="rating-helper-text">(영화를 입력하면 활성화)</span>
+              </label>
+
+              <!-- 별 5개 그래픽 위젯 -->
+              <div id="star-picker" class="star-picker is-disabled" aria-label="별점 5점 만점 선택">
+                <div class="stars-container">
+                  <!-- 별 1 -->
+                  <div class="star-box" data-star="1">
+                    <span class="star-half left" data-score="1" data-val="0.5" title="별 반 개 (1점)"></span>
+                    <span class="star-half right" data-score="2" data-val="1.0" title="별 한 개 (2점)"></span>
+                    <div class="star-visual">
+                      <span class="star-bg">★</span>
+                      <span class="star-fg" style="width: 0%;">★</span>
+                    </div>
+                  </div>
+                  <!-- 별 2 -->
+                  <div class="star-box" data-star="2">
+                    <span class="star-half left" data-score="3" data-val="1.5" title="별 한 개 반 (3점)"></span>
+                    <span class="star-half right" data-score="4" data-val="2.0" title="별 두 개 (4점)"></span>
+                    <div class="star-visual">
+                      <span class="star-bg">★</span>
+                      <span class="star-fg" style="width: 0%;">★</span>
+                    </div>
+                  </div>
+                  <!-- 별 3 -->
+                  <div class="star-box" data-star="3">
+                    <span class="star-half left" data-score="5" data-val="2.5" title="별 두 개 반 (5점)"></span>
+                    <span class="star-half right" data-score="6" data-val="3.0" title="별 세 개 (6점)"></span>
+                    <div class="star-visual">
+                      <span class="star-bg">★</span>
+                      <span class="star-fg" style="width: 0%;">★</span>
+                    </div>
+                  </div>
+                  <!-- 별 4 -->
+                  <div class="star-box" data-star="4">
+                    <span class="star-half left" data-score="7" data-val="3.5" title="별 세 개 반 (7점)"></span>
+                    <span class="star-half right" data-score="8" data-val="4.0" title="별 네 개 (8점)"></span>
+                    <div class="star-visual">
+                      <span class="star-bg">★</span>
+                      <span class="star-fg" style="width: 0%;">★</span>
+                    </div>
+                  </div>
+                  <!-- 별 5 -->
+                  <div class="star-box" data-star="5">
+                    <span class="star-half left" data-score="9" data-val="4.5" title="별 네 개 반 (9점)"></span>
+                    <span class="star-half right" data-score="10" data-val="5.0" title="별 다섯 개 (10점 만점)"></span>
+                    <div class="star-visual">
+                      <span class="star-bg">★</span>
+                      <span class="star-fg" style="width: 0%;">★</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 선택된 점수 안내 라벨 -->
+                <span id="star-score-text" class="star-score-text">영화를 먼저 입력해 주세요</span>
+              </div>
+
+              <!-- 백엔드 전송용 숨김 input -->
+              <input type="hidden" id="feedback-rating-input" name="rating" value="">
+            </div>
           </div>
 
+          <!-- 4. 내용 (필수) -->
           <div class="form-group message-group">
-            <label for="feedback-message-input" class="form-label">피드백 내용 (필수)</label>
+            <label for="feedback-message-input" class="form-label">내용 (필수)</label>
             <textarea
               id="feedback-message-input"
               name="message"
@@ -131,7 +210,7 @@
               rows="3"
               minlength="1"
               maxlength="500"
-              placeholder="추천받은 영화에 대한 감상이나 서비스 개선 의견을 남겨주세요 (1~500자)"
+              placeholder="추천받은 영화에 대한 솔직한 감상이나 서비스 개선 의견을 남겨주세요 (1~500자)"
               required
             ></textarea>
             <div class="char-count-wrap">
@@ -169,4 +248,3 @@
   <script src="src/js/app.js"></script>
 </body>
 </html>
-

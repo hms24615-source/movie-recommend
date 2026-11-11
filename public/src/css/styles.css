@@ -423,12 +423,26 @@ body {
   margin-bottom: 36px;
 }
 
+/* 피드백 입력 그리드 (작성자 + 영화 + 별점) */
+.feedback-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1.3fr;
+  gap: 16px;
+  align-items: start;
+}
+
 .form-label {
   display: block;
   font-size: 0.9rem;
   font-weight: 600;
   margin-bottom: 6px;
   color: var(--color-text-main);
+}
+
+.rating-helper-text {
+  font-size: 0.8rem;
+  font-weight: normal;
+  color: var(--color-text-muted);
 }
 
 .form-input,
@@ -450,6 +464,91 @@ body {
   border-color: var(--color-gold);
 }
 
+/* ==============================================================================
+   별 5개 그래픽 선택 위젯 (Star Picker) 스타일
+   ============================================================================== */
+.star-picker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background-color: #0d060a;
+  border: 1px solid #3d1b26;
+  border-radius: 6px;
+  min-height: 48px;
+  transition: opacity var(--transition-speed), border-color var(--transition-speed);
+}
+
+/* 영화 미입력 시 비활성화 상태 */
+.star-picker.is-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.stars-container {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.star-box {
+  position: relative;
+  width: 26px;
+  height: 28px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* 별 앞뒤 절반 클릭 감지 투명 영역 */
+.star-half {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  z-index: 3;
+}
+
+.star-half.left {
+  left: 0;
+}
+
+.star-half.right {
+  left: 50%;
+}
+
+/* 별 시각 렌더링 */
+.star-visual {
+  position: relative;
+  font-size: 26px;
+  line-height: 1;
+  display: inline-block;
+  pointer-events: none;
+}
+
+.star-bg {
+  color: #3b222d; /* 채워지지 않은 어두운 별 */
+  display: block;
+}
+
+.star-fg {
+  color: #ffd700; /* 황금빛 채워진 별 */
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 0%;
+  transition: width 0.15s ease-out;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+.star-score-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  white-space: nowrap;
+}
+
 .feedback-form .char-count {
   color: #88746b;
 }
@@ -466,20 +565,57 @@ body {
   background-color: #160c12;
   border: 1px solid #2b141e;
   border-radius: 8px;
-  padding: 16px 20px;
+  padding: 18px 20px;
 }
 
 .feedback-item-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.feedback-author-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .feedback-author {
   font-weight: 700;
   color: var(--color-gold);
-  font-size: 0.95rem;
+  font-size: 1rem;
+}
+
+/* 영화 제목 뱃지 */
+.feedback-movie-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #2d101c;
+  color: #f0c6d4;
+  border: 1px solid #541c32;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* 별점 뱃지 */
+.feedback-rating-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #2b1f09;
+  color: #ffda66;
+  border: 1px solid #664d12;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
 }
 
 .feedback-date {
@@ -492,6 +628,7 @@ body {
   font-size: 0.95rem;
   white-space: pre-wrap;
   word-break: break-word;
+  line-height: 1.6;
 }
 
 .list-status-text {
@@ -553,6 +690,16 @@ body {
   .similar-grid {
     grid-template-columns: 1fr;
   }
+
+  /* 모바일에서 피드백 입력 폼 1열로 세로 정렬 */
+  .feedback-inputs-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .star-picker {
+    justify-content: space-between;
+  }
 }
 
 /* 접근성: 애니메이션 감소 모드 대응 */
@@ -563,4 +710,3 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
-

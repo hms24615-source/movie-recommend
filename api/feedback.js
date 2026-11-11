@@ -1,6 +1,7 @@
 // ==============================================================================
 // api/feedback.js
 // 목적: 피드백 조회(GET) 및 등록(POST)을 처리하는 Vercel 서버리스 함수 엔드포인트
+// (확장: 영화 제목 및 별점 포함)
 // ==============================================================================
 
 const { validateFeedbackInput } = require('../lib/validation');
@@ -11,9 +12,10 @@ module.exports = async function handler(req, res) {
   if (req.method === 'GET') {
     try {
       // 최신순(created_at 내림차순)으로 최대 50건의 피드백을 조회합니다.
+      // 확장 필드: movie_title(영화명), rating(별점) 포함
       const { data, error } = await supabase
         .from('feedback')
-        .select('id, name, message, created_at')
+        .select('id, name, movie_title, rating, message, created_at')
         .order('created_at', { ascending: false })
         .limit(50);
 
@@ -41,7 +43,7 @@ module.exports = async function handler(req, res) {
 
   // 2. 피드백 신규 등록 (POST /api/feedback)
   if (req.method === 'POST') {
-    // 입력값 검증 (이름 길이, 본문 공백 여부 등)
+    // 입력값 검증 (이름, 영화 제목, 별점, 본문 공백 여부 등)
     const validation = validateFeedbackInput(req.body);
     if (!validation.isValid) {
       return res.status(400).json({
@@ -56,10 +58,12 @@ module.exports = async function handler(req, res) {
         .insert([
           {
             name: validation.sanitizedName,
+            movie_title: validation.sanitizedMovieTitle,
+            rating: validation.sanitizedRating,
             message: validation.sanitizedMessage
           }
         ])
-        .select('id, name, message, created_at')
+        .select('id, name, movie_title, rating, message, created_at')
         .single();
 
       if (error) {
@@ -93,4 +97,3 @@ module.exports = async function handler(req, res) {
     }
   });
 };
-
